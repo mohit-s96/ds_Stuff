@@ -1,223 +1,79 @@
-#include <iostream>
-#define LOG(x) std::cout << x;
-
-
-class Tree
-{
-public:
-    struct _Tree
-    {
-        _Tree* left;
-        int data;
-        _Tree* right;
-    };
-private:
-    _Tree* ROOT = nullptr;
-    _Tree* new_node(int value) const
-    {
-        _Tree* node = new _Tree();
-        node->data = value;
-        node->left = nullptr;
-        node->right = nullptr;
-
-        return node;
-    }
-
-    _Tree* insert_recursive(_Tree** current, int value)
-    {
-        if(!*current)
-        {
-            *current = new_node(value);
-        }
-        else if (value <= (*current)->data)
-        {
-            (*current)->left = insert_recursive(&(*current)->left, value);
-        }
-        else
-        {
-            (*current)->right = insert_recursive(&(*current)->right, value);
-        }
-        return (*current);
-    }
-
-    void print_recursive(_Tree* current)
-    {
-        if(!current) return;
-
-        LOG(current->data);
-        LOG("\n");
-        print_recursive(current->left);
-        print_recursive(current->right);
-    }
-
-    bool recursive_search(_Tree* current, int value)
-    {
-        if(!current) return false;
-        if(current->data == value) return true;
-        if(value <= current->data) return recursive_search(current->left, value);
-        else return recursive_search(current->right, value);
-    }
-
-    int recursive_max(_Tree* current)
-    {
-        if(!current->right) return current->data;
-
-        else return recursive_max(current->right);
-    }
-
-    int recursive_min(_Tree* current)
-    {
-        if(!current->left) return current->data;
-
-        else return recursive_min(current->left);
-    }
-
-    int max(int a, int b)
-    {
-        return a > b ? a : b;
-    }
-
-    int recursive_height(_Tree* current)
-    {
-        if(!current) return -1;
-        
-        return max(recursive_height(current->left), recursive_height(current->right)) + 1;
-    }
-
-    void recurse_print(_Tree*,int, int);
-
-public:
-    void insert(int value)
-    {
-        insert_recursive(&ROOT, value);
-    }
-
-    void print()
-    {
-        if(ROOT)
-        {
-            print_recursive(ROOT);
-        }
-        else{
-            LOG("No root found\n");
-        }
-    }
-
-    bool search(int value)
-    {
-        return recursive_search(ROOT, value);
-    }
-
-    void gotoxy(int x,int y)    
-    {
-        printf("%c[%d;%df",0x1B,y,x);
-    }
-    void clrscr(void)
-    {
-        system("clear");
-    }
-
-    int max_node()
-    {
-        return recursive_max(ROOT);
-    }
-
-    int min_node()
-    {
-        return recursive_min(ROOT);
-    }
-
-    int tree_height()
-    {
-        return recursive_height(ROOT);
-    }
-
-    void print_tree();
-
-    void delay(int x)
-    {
-        for(int i=x;i>0;i--)
-            for(int j=x;j>0;j--)
-        {
-
-        }
-    }
-};
-
-void Tree::print_tree()
-{
-    clrscr();
-    recurse_print(ROOT, 60, 0);
-    LOG("\n\n");
-}
-
-void Tree::recurse_print(Tree::_Tree* current, int x, int y)
-{
-    if(!current)
-        return;
-
-    gotoxy(x, y);
-    LOG(current->data);
-    if(current == ROOT) gotoxy(x, y + 2);
-    else gotoxy(x, y + 1);
-
-    int b  = 0;
-
-    if(current->left && current->left->right && current->right && current->right->left)
-    {
-        b = 8;
-    } 
-    int a = x;
-    
-    if(current->left || current->right) LOG("|");
-
-    if(current->left)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for(j = 1; j != i ; j++)
-        {
-            gotoxy(a - (1 + j), y + (1 + j));
-            LOG("/");
-        }
-    }
-
-    if(current->right)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for(j = 1; j != i ; j++)
-        {
-            gotoxy(a + (1 + j), y + (1 + j));
-            LOG("\\");
-        }
-    }
-
-    recurse_print(current->left, x - 3 - b, y + 4);
-    recurse_print(current->right, x + 3 + b, y + 4);
-    
-}
+#include "tree.h"
 
 int main()
 {
     Tree T;
 
     T.insert(7);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(3);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(12);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(1);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(6);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(0);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(2);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(4);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(5);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(9);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(13);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(8);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(11);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(15);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(10);
+    T.print_tree(false);
+    T.delay(15000);
+
     T.insert(14);
+    T.print_tree(false);
+
+    // T.rotate_r(12);
+
+    T.rotate_l(9);
+
+    T.print_tree(false);
+
+    LOG("Press return to exit\n");
 
     std::cin.get();
     return 0;

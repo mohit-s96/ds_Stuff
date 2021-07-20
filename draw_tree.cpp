@@ -5,14 +5,13 @@
 
 class Tree
 {
-public:
+private:
     struct _Tree
     {
         _Tree* left;
         int data;
         _Tree* right;
     };
-private:
     _Tree* ROOT = nullptr;
     _Tree* new_node(int value) const
     {
@@ -195,7 +194,7 @@ int main()
     T.insert(14);
     T.print_tree();
 
-    LOG("Press enter to exit\n");
+    LOG("Press return to exit\n");
 
     std::cin.get();
     return 0;
