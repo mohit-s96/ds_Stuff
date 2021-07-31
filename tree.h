@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "print.h"
 #define LOG(x) std::cout << x;
 
 class Tree
@@ -19,10 +20,20 @@ public:
         int height;
         int b_Factor;
     };
+    struct RBT
+    {
+        RBT* left;
+        RBT* right;
+        RBT* parent;
+        int data;
+        bool color;
+    };
 
 private:
     _Tree *ROOT = nullptr;
     AVL *A_ROOT = nullptr;
+    RBT* RB_ROOT = nullptr;
+
     _Tree *new_node(int value) const
     {
         _Tree *node = new _Tree();
@@ -48,6 +59,25 @@ private:
     AVL *new_avl_node(int value);
 
     AVL *_avl_insert(AVL *, int);
+
+
+    RBT* new_rbt_node(int);
+
+    RBT* _rbt_insert(RBT*, int);
+
+    RBT* balance_node(RBT*);
+
+    void color_flip(RBT*);
+
+    RBT* perform_rotations(RBT*);
+
+    RBT *left_left_case(RBT *);
+
+    RBT *left_right_case(RBT *);
+
+    RBT *right_right_case(RBT *);
+
+    RBT *right_left_case(RBT *);
 
     _Tree *insert_recursive(_Tree **current, int value)
     {
@@ -121,7 +151,7 @@ private:
     }
 
     void recurse_print(_Tree *, int, int);
-    void recurse_print(AVL *, int, int);
+    // void recurse_print(AVL *, int, int);
 
     _Tree *get_parent(_Tree *current, _Tree *node)
     {
@@ -177,10 +207,7 @@ private:
 
     AVL *avl_rotate_right(AVL *node)
     {
-        // AVL* parent = get_parent(A_ROOT, node);
         AVL *left = node->left;
-        // if(parent && parent->left == node) parent->left = left;
-        // if(parent && parent->right == node) parent->right = left;
         node->left = left->right;
         left->right = node;
 
@@ -192,10 +219,7 @@ private:
 
     AVL *avl_rotate_left(AVL *node)
     {
-        // AVL* parent = get_parent(A_ROOT, node);
         AVL *right = node->right;
-        // if(parent && parent->left == node) parent->left = right;
-        // if(parent && parent->right == node) parent->right = right;
         node->right = right->left;
         right->left = node;
 
@@ -205,7 +229,30 @@ private:
         return right;
     }
 
+    RBT *rbt_rotate_right(RBT *node)
+    {
+        RBT *left = node->left;
+        RBT* parent = node->parent;
+        node->left = left->right;
+        left->right = node;
+        node->parent = left;
+        left->parent = parent;
+        return left;
+    }
+
+    RBT *rbt_rotate_left(RBT *node)
+    {
+        RBT *right = node->right;
+        RBT* parent = node->parent;
+        node->right = right->left;
+        right->left = node;
+        node->parent = right;
+        right->parent = parent;
+        return right;
+    }
+
 public:
+    void rbt_insert(int value);
     void avl_insert(int value);
     void insert(int value)
     {
@@ -253,8 +300,9 @@ public:
         return recursive_height(ROOT);
     }
 
-    void print_tree(bool);
-    void print_tree();
+    void print_tree_normal();
+    void print_tree_avl();
+    void print_tree_rbt();
 
     void delay(int x)
     {
@@ -277,114 +325,120 @@ public:
     }
 };
 
-void Tree::print_tree(bool n)
-{
-    if (!n)
-        clrscr();
-    recurse_print(ROOT, 60, 0);
-    LOG("\n\n");
-}
-
-void Tree::print_tree()
+void Tree::print_tree_normal()
 {
     clrscr();
-    recurse_print(A_ROOT, 60, 0);
+    call_print(ROOT, 60, 0);
     LOG("\n\n");
 }
 
-void Tree::recurse_print(Tree::_Tree *current, int x, int y)
+void Tree::print_tree_avl()
 {
-    if (!current)
-        return;
-
-    gotoxy(x, y);
-    LOG(current->data);
-    if (current == ROOT)
-        gotoxy(x, y + 2);
-    else
-        gotoxy(x, y + 1);
-
-    int b = 0;
-
-    if (current->left && current->left->right && current->right && current->right->left)
-    {
-        b = 8;
-    }
-    int a = x;
-
-    if (current->left || current->right)
-        LOG("|");
-
-    if (current->left)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for (j = 1; j != i; j++)
-        {
-            gotoxy(a - (1 + j), y + (1 + j));
-            LOG("/");
-        }
-    }
-
-    if (current->right)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for (j = 1; j != i; j++)
-        {
-            gotoxy(a + (1 + j), y + (1 + j));
-            LOG("\\");
-        }
-    }
-
-    recurse_print(current->left, x - 3 - b, y + 4);
-    recurse_print(current->right, x + 3 + b, y + 4);
+    clrscr();
+    call_print(A_ROOT, 60, 0);
+    LOG("\n\n");
 }
-void Tree::recurse_print(Tree::AVL *current, int x, int y)
+
+void Tree::print_tree_rbt()
 {
-    if (!current)
-        return;
-
-    gotoxy(x, y);
-    LOG(current->data);
-    if (current == A_ROOT)
-        gotoxy(x, y + 2);
-    else
-        gotoxy(x, y + 1);
-
-    int b = 0;
-
-    if (current->left && current->left->right && current->right && current->right->left)
-    {
-        b = 8;
-    }
-    int a = x;
-
-    if (current->left || current->right)
-        LOG("|");
-
-    if (current->left)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for (j = 1; j != i; j++)
-        {
-            gotoxy(a - (1 + j), y + (1 + j));
-            LOG("/");
-        }
-    }
-
-    if (current->right)
-    {
-        int i = b == 0 ? 3 : b - 4, j;
-
-        for (j = 1; j != i; j++)
-        {
-            gotoxy(a + (1 + j), y + (1 + j));
-            LOG("\\");
-        }
-    }
-
-    recurse_print(current->left, x - 3 - b, y + 4);
-    recurse_print(current->right, x + 3 + b, y + 4);
+    clrscr();
+    call_print(RB_ROOT, 60, 0);
+    LOG("\n\n");
 }
+
+// void Tree::recurse_print(Tree::_Tree *current, int x, int y)
+// {
+//     if (!current)
+//         return;
+
+//     gotoxy(x, y);
+//     LOG(current->data);
+//     if (current == ROOT)
+//         gotoxy(x, y + 2);
+//     else
+//         gotoxy(x, y + 1);
+
+//     int b = 0;
+
+//     if (current->left && current->left->right && current->right && current->right->left)
+//     {
+//         b = 8;
+//     }
+//     int a = x;
+
+//     if (current->left || current->right)
+//         LOG("|");
+
+//     if (current->left)
+//     {
+//         int i = b == 0 ? 3 : b - 4, j;
+
+//         for (j = 1; j != i; j++)
+//         {
+//             gotoxy(a - (1 + j), y + (1 + j));
+//             LOG("/");
+//         }
+//     }
+
+//     if (current->right)
+//     {
+//         int i = b == 0 ? 3 : b - 4, j;
+
+//         for (j = 1; j != i; j++)
+//         {
+//             gotoxy(a + (1 + j), y + (1 + j));
+//             LOG("\\");
+//         }
+//     }
+
+//     recurse_print(current->left, x - 3 - b, y + 4);
+//     recurse_print(current->right, x + 3 + b, y + 4);
+// }
+// void Tree::recurse_print(Tree::AVL *current, int x, int y)
+// {
+//     if (!current)
+//         return;
+
+//     gotoxy(x, y);
+//     LOG(current->data);
+//     if (current == A_ROOT)
+//         gotoxy(x, y + 2);
+//     else
+//         gotoxy(x, y + 1);
+
+//     int b = 0;
+
+//     if (current->left && current->left->right && current->right && current->right->left)
+//     {
+//         b = 8;
+//     }
+//     int a = x;
+
+//     if (current->left || current->right)
+//         LOG("|");
+
+//     if (current->left)
+//     {
+//         int i = b == 0 ? 3 : b - 4, j;
+
+//         for (j = 1; j != i; j++)
+//         {
+//             gotoxy(a - (1 + j), y + (1 + j));
+//             LOG("/");
+//         }
+//     }
+
+//     if (current->right)
+//     {
+//         int i = b == 0 ? 3 : b - 4, j;
+
+//         for (j = 1; j != i; j++)
+//         {
+//             gotoxy(a + (1 + j), y + (1 + j));
+//             LOG("\\");
+//         }
+//     }
+
+//     recurse_print(current->left, x - 3 - b, y + 4);
+//     recurse_print(current->right, x + 3 + b, y + 4);
+// }

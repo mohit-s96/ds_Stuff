@@ -14,7 +14,7 @@ Tree::AVL *Tree::new_avl_node(int value)
 
     return node;
 }
-
+//add 2 numbers
 void Tree::update_node(Tree::AVL *node)
 {
     int lh = -1;
@@ -99,16 +99,84 @@ int main()
     Tree T;
 
     T.avl_insert(1);
-    T.avl_insert(2);
-    T.avl_insert(3);
-    T.avl_insert(4);
-    T.avl_insert(5);
-    T.avl_insert(6);
-    T.avl_insert(7);
-    T.avl_insert(8);
-    T.avl_insert(9);
+    T.delay(15000);
+    T.print_tree_avl();
 
-    T.print_tree();
+    T.avl_insert(2);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(3);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(4);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(5);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(6);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(7);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(8);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(9);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(10);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(11);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(12);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(13);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(14);
+    T.delay(15000);
+    T.print_tree_avl();
+    
+    T.avl_insert(15);
+    T.delay(15000);
+    T.print_tree_avl();
+    
+    T.avl_insert(16);
+    T.delay(15000);
+    T.print_tree_avl();
+    
+    T.avl_insert(17);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(18);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(19);
+    T.delay(15000);
+    T.print_tree_avl();
+
+    T.avl_insert(20);
+    T.delay(15000);
+    T.print_tree_avl();
 
     LOG("Press return to exit\n");
 
