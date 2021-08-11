@@ -1,5 +1,10 @@
 #pragma once
 #include <iostream>
+#ifndef NODES
+#define left getLchild()
+#define right getRchild()
+#define data getKey()
+#endif
 #define LOG(x) std::cout << x;
 void gotoxy(int x, int y)
 {

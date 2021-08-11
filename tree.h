@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#define NODES
 #include "print.h"
 #define LOG(x) std::cout << x;
 
@@ -63,7 +64,7 @@ private:
 
     RBT* new_rbt_node(int);
 
-    RBT* _rbt_insert(RBT*, int);
+    void _rbt_insert(RBT*&, int);
 
     RBT* balance_node(RBT*);
 
@@ -250,8 +251,20 @@ private:
         right->parent = parent;
         return right;
     }
+    void rbt_inorder(RBT* current)
+    {
+        if(!current) return;
+        rbt_inorder(current->left);
+        LOG(current->data);
+        LOG(" ");
+        rbt_inorder(current->right);
+    }
 
 public:
+    void rbt_inorder()
+    {
+        rbt_inorder(RB_ROOT);
+    }
     void rbt_insert(int value);
     void avl_insert(int value);
     void insert(int value)
